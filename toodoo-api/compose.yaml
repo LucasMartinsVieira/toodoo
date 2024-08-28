@@ -1,0 +1,11 @@
+services:
+  db:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_USER: toodoo-user
+      MYSQL_PASSWORD: kQa7fDmF6yQpymuy46YN8PxNua2DVAcY
+      MYSQL_ROOT_PASSWORD: HfxdX2QMlR5Nj5cHhJmQdejNqXx4TCCJ
+      MYSQL_DATABASE: toodoo
+    ports:
+      - 3306:3306
