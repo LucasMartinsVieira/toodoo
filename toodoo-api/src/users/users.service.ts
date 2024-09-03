@@ -69,6 +69,20 @@ export class UsersService {
     return await this.usersRepository.delete(id);
   }
 
+  async findOneByEmail(email: string) {
+    return await this.usersRepository.findOneBy({ email });
+  }
+
+  async validateUser(email: string, pass: string) {
+    const user = await this.findOneByEmail(email);
+
+    if (user && (await bcrypt.compare(pass, user.password))) {
+      delete user.password;
+
+      return user;
+    }
+  }
+
   async idExists(id: string) {
     if (
       !(await this.usersRepository.exist({
