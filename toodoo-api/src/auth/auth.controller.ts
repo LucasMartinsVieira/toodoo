@@ -1,9 +1,19 @@
-import { Body, Controller, Get, Post, Param, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Param,
+  UseGuards,
+  Delete,
+  Patch,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { SignInUserDto } from './dto/sign-in-user.dto';
 import { AuthGuard } from './auth.guard';
-import { ProfileUserDto } from './dto/profile-user.dto';
+import { UserIdDto } from './dto/profile-user.dto';
+import { UpdateUserDto } from 'src/users/dto/update-user.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -21,7 +31,22 @@ export class AuthController {
 
   @UseGuards(AuthGuard)
   @Get('profile/:id')
-  async profile(@Param() params: ProfileUserDto) {
-    return await this.authService.profile(params.id);
+  async profile(@Param() userIdDto: UserIdDto) {
+    return await this.authService.profile(userIdDto.id);
+  }
+
+  @UseGuards(AuthGuard)
+  @Patch('update/:id')
+  async update(
+    @Param() userIdDto: UserIdDto,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    return await this.authService.update(userIdDto.id, updateUserDto);
+  }
+
+  @UseGuards(AuthGuard)
+  @Delete('remove/:id')
+  async remove(@Param() param: UserIdDto) {
+    return await this.authService.remove(param.id);
   }
 }

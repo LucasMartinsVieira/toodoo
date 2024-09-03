@@ -8,6 +8,7 @@ import { UsersService } from 'src/users/users.service';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { SignInUserDto } from './dto/sign-in-user.dto';
 import { CreateUserTokenDto } from './dto/create-user-token.dto';
+import { UpdateUserDto } from 'src/users/dto/update-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -89,5 +90,13 @@ export class AuthService {
     }
 
     throw new UnauthorizedException();
+  }
+
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    return await this.usersService.update(id, updateUserDto);
+  }
+
+  async remove(id: string) {
+    return await this.usersService.remove(id);
   }
 }
