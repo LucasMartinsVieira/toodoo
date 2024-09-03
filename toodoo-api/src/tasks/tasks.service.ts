@@ -33,6 +33,7 @@ export class TasksService {
       user,
     });
 
+    // TODO: Clean up this response
     return this.tasksRepository.save(task);
   }
 
@@ -52,10 +53,17 @@ export class TasksService {
     return tasks;
   }
 
-  async findOne(id: string) {
+  async findOne(id: string, userId: string) {
     this.idExists(id);
 
-    return await this.tasksRepository.findOneBy({ id });
+    const task = await this.tasksRepository.findOne({
+      where: {
+        id: id,
+        user: { id: userId },
+      },
+    });
+
+    return task;
   }
 
   update(id: string, updateTaskDto: UpdateTaskDto) {
