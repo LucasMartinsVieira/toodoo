@@ -66,7 +66,9 @@ export class UsersService {
   async remove(id: string) {
     await this.idExists(id);
 
-    return await this.usersRepository.delete(id);
+    await this.usersRepository.delete(id);
+
+    return true;
   }
 
   async findOneByEmail(email: string) {

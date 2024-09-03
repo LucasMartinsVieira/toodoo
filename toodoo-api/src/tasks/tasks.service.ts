@@ -70,8 +70,15 @@ export class TasksService {
     return `This action updates a #${id} task`;
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} task`;
+  async remove(id: string, userId: string) {
+    this.idExists(id);
+
+    await this.tasksRepository.delete({
+      id: id,
+      user: { id: userId },
+    });
+
+    return true;
   }
 
   async idExists(id: string) {
