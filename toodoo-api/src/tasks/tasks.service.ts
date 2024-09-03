@@ -66,8 +66,21 @@ export class TasksService {
     return task;
   }
 
-  update(id: string, updateTaskDto: UpdateTaskDto) {
-    return `This action updates a #${id} task`;
+  async update(id: string, updateTaskDto: UpdateTaskDto, userId: string) {
+    const user = await this.usersRepository.findOne({ where: { id: userId } });
+
+    if (!user) {
+      throw new NotFoundException(`User ${userId} not found!`);
+    }
+
+    this.tasksRepository.create({
+      ...updateTaskDto,
+      user,
+    });
+
+    await this.tasksRepository.update(id, updateTaskDto);
+
+    return true;
   }
 
   async remove(id: string, userId: string) {
