@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
 import { RegisterUserDto } from './dto/register-user.dto';
@@ -42,6 +46,18 @@ export class AuthService {
       }),
     };
   }
+  checkToken(token: string) {
+    try {
+      const data = this.jwtService.verify(token, {
+        issuer: this.issuer,
+        audience: this.audience,
+      });
+
+      return data;
+    } catch (e) {
+      throw new BadRequestException(e);
+    }
+  }
 
   async signIn(signInUserDto: SignInUserDto) {
     const user = await this.validateUser(signInUserDto);
@@ -57,5 +73,21 @@ export class AuthService {
     if (user) {
       return await this.createToken(user);
     }
+  }
+
+  async profile(id: string) {
+    const user = await this.usersService.findOne(id);
+
+    if (user) {
+      // Deleting sensitive information for user profile
+      delete user.password;
+      delete user.createdAt;
+      delete user.updatedAt;
+      delete user.id;
+
+      return user;
+    }
+
+    throw new UnauthorizedException();
   }
 }
