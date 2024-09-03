@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Request,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
@@ -16,8 +17,10 @@ export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
   @Post()
-  create(@Body() createTaskDto: CreateTaskDto) {
-    return this.tasksService.create(createTaskDto);
+  async create(@Body() createTaskDto: CreateTaskDto, @Request() req) {
+    const userId = req.user.id;
+
+    return await this.tasksService.create(createTaskDto, userId);
   }
 
   @Get()

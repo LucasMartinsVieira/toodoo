@@ -84,7 +84,6 @@ export class AuthService {
       delete user.password;
       delete user.createdAt;
       delete user.updatedAt;
-      delete user.id;
 
       return user;
     }
