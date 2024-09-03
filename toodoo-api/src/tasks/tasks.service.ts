@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   HttpException,
   HttpStatus,
   Injectable,
@@ -33,8 +34,13 @@ export class TasksService {
       user,
     });
 
-    // TODO: Clean up this response
-    return this.tasksRepository.save(task);
+    try {
+      await this.tasksRepository.save(task);
+    } catch (e) {
+      throw new BadRequestException('Could not create task!');
+    }
+
+    return true;
   }
 
   async findAll(userId: string) {
@@ -78,7 +84,11 @@ export class TasksService {
       user,
     });
 
-    await this.tasksRepository.update(id, updateTaskDto);
+    try {
+      await this.tasksRepository.update(id, updateTaskDto);
+    } catch (e) {
+      throw new BadRequestException('Could not update task!');
+    }
 
     return true;
   }

@@ -35,7 +35,11 @@ export class UsersService {
     ) {
       throw new BadRequestException('This email is already been used');
     }
-    return await this.usersRepository.save(user);
+    try {
+      return await this.usersRepository.save(user);
+    } catch (e) {
+      throw new BadRequestException('Could not save user!');
+    }
   }
 
   async findAll() {
@@ -60,7 +64,13 @@ export class UsersService {
 
     updateUserDto.password = await bcrypt.hash(updateUserDto.password, salt);
 
-    await this.usersRepository.update(id, updateUserDto);
+    try {
+      await this.usersRepository.update(id, updateUserDto);
+    } catch (e) {
+      throw new BadRequestException('Could not update user!');
+    }
+
+    return true;
   }
 
   async remove(id: string) {
