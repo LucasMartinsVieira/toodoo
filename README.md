@@ -10,3 +10,6 @@
 - Generated auth resource with CLI
 - Implemented JWT
 - Implemented CRUD for tasks
+- Generated frontent using vite
+- Configured tailwindcss
+- Configured react-router-dom
