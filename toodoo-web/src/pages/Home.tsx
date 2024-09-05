@@ -1,6 +1,9 @@
+import Nav from "../components/Nav";
+
 const Home = () => {
   return (
     <>
+      <Nav />
       <div
         className="flex flex-col items-center justify-center 
     min-h-screen bg-gray-900"
