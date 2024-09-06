@@ -22,3 +22,4 @@
 - Create useAuth hook for DRY
 - add login page
 - add profile page
+  - Add delete account button using shadcn/ui alert-dialog

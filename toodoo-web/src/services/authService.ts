@@ -4,6 +4,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 const REGISTER_URL = `${API_URL}/auth/register`;
 const LOGIN_URL = `${API_URL}/auth/login`;
 const UPDATE_URL = `${API_URL}/auth/update`;
+const REMOVE_URL = `${API_URL}/auth/remove`;
 
 interface DecodedToken {
   sub: string;
@@ -91,6 +92,23 @@ export const updateUserProfile = async (name: string, email: string) => {
   });
 
   if (!response.ok) {
-    throw new Error("Failed to update user profile");
+    throw new Error("Failed to update user profile!");
+  }
+};
+
+export const deleteUserAccout = async () => {
+  const userInfo = await JSON.parse(await getUserProfile());
+  const userId = userInfo.id;
+
+  const response = await fetch(`${REMOVE_URL}/${userId}`, {
+    method: "DELETE",
+    headers: {
+      // prettier-ignore
+      "Authorization": `Bearer ${localStorage.getItem("access_token")}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to delete user account!");
   }
 };

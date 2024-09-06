@@ -1,8 +1,23 @@
 import MainContainer from "@/components/Container";
 import Nav from "@/components/Nav";
+import {
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialog,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { getUserProfile, updateUserProfile } from "@/services/authService";
+import {
+  getUserProfile,
+  updateUserProfile,
+  deleteUserAccout,
+} from "@/services/authService";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -34,6 +49,19 @@ const Profile = () => {
       navigate("/tasks");
     } catch (error) {
       alert("Error updating profile: " + error);
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    try {
+      await deleteUserAccout();
+      localStorage.removeItem("access_token");
+
+      alert("Account deleted successfully");
+
+      navigate("/login");
+    } catch (e) {
+      alert("Error deleting account " + e);
     }
   };
 
@@ -77,6 +105,38 @@ const Profile = () => {
           >
             Update Profile
           </Button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button
+                variant="destructive"
+                className="bg-red-600 text-white rounded-full py-2 hover:bg-red-700"
+              >
+                Delete Account
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent className="bg-gray-800 text-white border border-gray-800 rounded-lg">
+              <AlertDialogHeader>
+                <AlertDialogTitle className="text-violet-600">
+                  Are you absolutely sure?
+                </AlertDialogTitle>
+                <AlertDialogDescription className="text-gray-400">
+                  Warning! This will permanently delete all your account data
+                  and this action cannot be undone.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel className="text-white bg-gray-500 border-black hover:bg-gray-600 hover:text-white rounded-full py-2">
+                  Cancel
+                </AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={handleDeleteAccount}
+                  className="bg-red-600 text-white rounded-full py-2 hover:bg-red-700"
+                >
+                  Continue
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </form>
         <p className="text-gray-500 mt-4">
           Want to go back?{" "}

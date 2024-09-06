@@ -33,6 +33,16 @@ const Nav = () => {
                 Tasks
               </a>
             </li>
+            {isLoggedIn && (
+              <li>
+                <a
+                  href="/profile"
+                  className="text-white text-lg hover:text-violet-300 transition duration-200"
+                >
+                  Profile
+                </a>
+              </li>
+            )}
             {!isLoggedIn && (
               <li>
                 <a
