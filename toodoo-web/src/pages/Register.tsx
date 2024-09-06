@@ -24,6 +24,21 @@ const Register = () => {
       return;
     }
 
+    if (password.length > 128 || password.length < 3) {
+      alert("Password must be between 3 and 128 characters");
+      return;
+    }
+
+    if (email.length > 128) {
+      alert("Email cannot be longer than 128 characters");
+      return;
+    }
+
+    if (name.length > 63) {
+      alert("Name cannot be longer than 63 characters");
+      return;
+    }
+
     try {
       const response = await registerUser(name, email, password);
 
