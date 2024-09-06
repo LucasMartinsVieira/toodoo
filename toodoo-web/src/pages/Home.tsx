@@ -1,14 +1,12 @@
 import { Button } from "@/components/ui/button";
 import Nav from "../components/Nav";
+import MainContainer from "@/components/Container";
 
 const Home = () => {
   return (
     <>
       <Nav />
-      <div
-        className="flex flex-col items-center justify-center 
-    min-h-screen bg-gray-900"
-      >
+      <MainContainer>
         <header className="text-4xl font-bold text-violet-600 mb-4">
           Welcome to Toodoo
         </header>
@@ -32,7 +30,7 @@ const Home = () => {
             <a href="/login">Login</a>
           </Button>
         </div>
-      </div>
+      </MainContainer>
     </>
   );
 };
