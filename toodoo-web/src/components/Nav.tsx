@@ -1,4 +1,30 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 const Nav = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
+
+  // Check if JWT Token exists in localStorage to verify login status
+  useEffect(() => {
+    const token = localStorage.getItem("access_token");
+    console.log(token);
+
+    if (token) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, []);
+
+  // Handle logout
+  const handleLogout = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    localStorage.removeItem("access_token");
+    setIsLoggedIn(false);
+    navigate("/login");
+  };
+
   return (
     <>
       <nav className="bg-violet-600 p-4">
@@ -7,7 +33,7 @@ const Nav = () => {
             <li>
               <a
                 href="/"
-                className="text-white text-lg hover:text-violet-200 transition duration-200"
+                className="text-white text-lg hover:text-violet-300 transition duration-200"
               >
                 Home
               </a>
@@ -15,35 +41,42 @@ const Nav = () => {
             <li>
               <a
                 href="/tasks"
-                className="text-white text-lg hover:text-violet-200 transition duration-200"
+                className="text-white text-lg hover:text-violet-300 transition duration-200"
               >
                 Tasks
               </a>
             </li>
-            <li>
-              <a
-                href="/register"
-                className="text-white text-lg hover:text-violet-200 transition duration-200"
-              >
-                Register
-              </a>
-            </li>
-            <li>
-              <a
-                href="/login"
-                className="text-white text-lg hover:text-violet-200 transition duration-200"
-              >
-                Login
-              </a>
-            </li>
-            <li>
-              <a
-                href="/logout"
-                className="text-white text-lg hover:text-violet-200 transition duration-200"
-              >
-                Logout
-              </a>
-            </li>
+            {!isLoggedIn && (
+              <li>
+                <a
+                  href="/register"
+                  className="text-white text-lg hover:text-violet-300 transition duration-200"
+                >
+                  Register
+                </a>
+              </li>
+            )}
+            {!isLoggedIn && (
+              <li>
+                <a
+                  href="/login"
+                  className="text-white text-lg hover:text-violet-300 transition duration-200"
+                >
+                  Login
+                </a>
+              </li>
+            )}
+            {isLoggedIn && (
+              <li>
+                <a
+                  href="/logout"
+                  className="text-white text-lg hover:text-violet-300 transition duration-200"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </a>
+              </li>
+            )}
           </ul>
         </div>
       </nav>
