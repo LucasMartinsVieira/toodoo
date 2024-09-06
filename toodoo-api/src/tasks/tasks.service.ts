@@ -152,19 +152,34 @@ export class TasksService {
   }
 
   async update(id: string, updateTaskDto: UpdateTaskDto, userId: string) {
+    await this.idExists(id);
+
     const user = await this.usersRepository.findOne({ where: { id: userId } });
 
     if (!user) {
       throw new NotFoundException(`User ${userId} not found!`);
     }
+    // Encrypt fields that need encryption
+    const updatedFields: Partial<Task> = {
+      ...updateTaskDto,
+      user,
+    };
 
     this.tasksRepository.create({
       ...updateTaskDto,
       user,
     });
 
+    if (updateTaskDto.title) {
+      updatedFields.title = this.encryptData(updateTaskDto.title);
+    }
+
+    if (updateTaskDto.description) {
+      updatedFields.description = this.encryptData(updateTaskDto.description);
+    }
+
     try {
-      await this.tasksRepository.update(id, updateTaskDto);
+      await this.tasksRepository.update(id, updatedFields);
     } catch (e) {
       throw new BadRequestException('Could not update task!');
     }
