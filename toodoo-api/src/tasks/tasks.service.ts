@@ -11,32 +11,96 @@ import { Repository } from 'typeorm';
 import { Task } from './entities/task.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/entities/user.entity';
+import * as crypto from 'crypto';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class TasksService {
+  private encryptionKey: Buffer;
+
   constructor(
     @InjectRepository(Task)
     private readonly tasksRepository: Repository<Task>,
 
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
-  ) {}
 
-  async create(createTaskDto: CreateTaskDto, userId: string) {
+    private readonly configService: ConfigService,
+  ) {
+    // Retrieve the encryption key from the environment variable
+    const keyHex = this.configService.get<string>('ENCRYPTION_KEY');
+    if (!keyHex || keyHex.length !== 64) {
+      throw new Error('Invalid encryption key length');
+    }
+    this.encryptionKey = Buffer.from(keyHex, 'hex'); // Convert hex key to Buffer
+  }
+
+  // Encrypt data using AES-GCM
+  encryptData(data: string): string {
+    const iv = crypto.randomBytes(12); // AES-GCM typically uses a 12-byte IV
+    const cipher = crypto.createCipheriv('aes-256-gcm', this.encryptionKey, iv);
+
+    let encrypted = cipher.update(data, 'utf8', 'hex');
+    encrypted += cipher.final('hex');
+
+    const authTag = cipher.getAuthTag().toString('hex');
+    return `${iv.toString('hex')}:${encrypted}:${authTag}`;
+  }
+
+  // Decrypt data using AES-GCM
+  decryptData(encryptedData: string): string {
+    const [ivHex, encryptedHex, authTagHex] = encryptedData.split(':');
+    const iv = Buffer.from(ivHex, 'hex');
+    const authTag = Buffer.from(authTagHex, 'hex');
+
+    const decipher = crypto.createDecipheriv(
+      'aes-256-gcm',
+      this.encryptionKey,
+      iv,
+    );
+    decipher.setAuthTag(authTag);
+
+    let decrypted = decipher.update(encryptedHex, 'hex', 'utf8');
+    decrypted += decipher.final('utf8');
+
+    return decrypted;
+  }
+
+  async create(createTaskDto: CreateTaskDto, userId: string): Promise<boolean> {
     const user = await this.usersRepository.findOne({ where: { id: userId } });
+    // eslint-disable-next-line prefer-const
+    let { title, description, status, dueDate } = createTaskDto;
 
     if (!user) {
       throw new NotFoundException(`User ${userId} not found!`);
     }
 
+    if (description === undefined || description === null) {
+      // Use an empty string or default value if description is not provided
+      description = '';
+    }
+
+    let encryptedTitle: string;
+    let encryptedDescription: string;
+
+    try {
+      encryptedTitle = this.encryptData(title);
+      encryptedDescription = this.encryptData(description);
+    } catch (error) {
+      throw new BadRequestException('Encryption failed.');
+    }
+
     const task = this.tasksRepository.create({
-      ...createTaskDto,
+      title: encryptedTitle,
+      description: encryptedDescription,
+      status,
+      dueDate,
       user,
     });
 
     try {
       await this.tasksRepository.save(task);
-    } catch (e) {
+    } catch (error) {
       throw new BadRequestException('Could not create task!');
     }
 
