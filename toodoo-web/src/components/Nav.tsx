@@ -1,27 +1,14 @@
-import { useEffect, useState } from "react";
+import useAuth from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
 const Nav = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const isLoggedIn = useAuth();
   const navigate = useNavigate();
-
-  // Check if JWT Token exists in localStorage to verify login status
-  useEffect(() => {
-    const token = localStorage.getItem("access_token");
-    console.log(token);
-
-    if (token) {
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
-    }
-  }, []);
 
   // Handle logout
   const handleLogout = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     localStorage.removeItem("access_token");
-    setIsLoggedIn(false);
     navigate("/login");
   };
 

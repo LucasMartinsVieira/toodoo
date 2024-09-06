@@ -16,3 +16,7 @@
 - Configured shadcn/ui
 - Add encryption to tasks on backend
   - Using AES-GCM for simplicity for using a key on a .env file
+- Add home page
+- Add navbar
+- Add register page
+- Create useAuth hook for DRY
