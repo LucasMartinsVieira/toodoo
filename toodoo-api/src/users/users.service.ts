@@ -60,9 +60,11 @@ export class UsersService {
   async update(id: string, updateUserDto: UpdateUserDto) {
     await this.idExists(id);
 
-    const salt = await bcrypt.genSalt();
+    if (updateUserDto.password) {
+      const salt = await bcrypt.genSalt();
 
-    updateUserDto.password = await bcrypt.hash(updateUserDto.password, salt);
+      updateUserDto.password = await bcrypt.hash(updateUserDto.password, salt);
+    }
 
     try {
       await this.usersRepository.update(id, updateUserDto);
