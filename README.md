@@ -20,3 +20,4 @@
 - Add navbar
 - Add register page
 - Create useAuth hook for DRY
+- add login page
