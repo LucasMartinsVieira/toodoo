@@ -13,3 +13,6 @@
 - Generated frontent using vite
 - Configured tailwindcss
 - Configured react-router-dom
+- Configured shadcn/ui
+- Add encryption to tasks on backend
+  - Using AES-GCM for simplicity for using a key on a .env file

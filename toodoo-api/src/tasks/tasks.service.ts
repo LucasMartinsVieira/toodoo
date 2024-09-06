@@ -35,7 +35,16 @@ export class TasksService {
     this.encryptionKey = Buffer.from(keyHex, 'hex'); // Convert hex key to Buffer
   }
 
-  // Encrypt data using AES-GCM
+  /**
+   * Encrypts data using AES-GCM.
+   *
+   * @param {string} data - The plaintext data to encrypt.
+   * @returns {string} The encrypted data in the format: `iv:encryptedData:authTag`.
+   *
+   * @example
+   * const encrypted = encryptData('mySensitiveData');
+   * console.log(encrypted); // e.g., "a1b2c3d4e5f6:7g8h9i0j1k2l:3m4n5o6p7q8r"
+   */
   encryptData(data: string): string {
     const iv = crypto.randomBytes(12); // AES-GCM typically uses a 12-byte IV
     const cipher = crypto.createCipheriv('aes-256-gcm', this.encryptionKey, iv);
@@ -47,7 +56,22 @@ export class TasksService {
     return `${iv.toString('hex')}:${encrypted}:${authTag}`;
   }
 
-  // Decrypt data using AES-GCM
+  /**
+   * Decrypts data that was encrypted using AES-GCM.
+   *
+   * @param {string} encryptedData - The encrypted data in the format: `iv:encryptedData:authTag`.
+   * @returns {string} The decrypted plaintext data.
+   *
+   * @throws {Error} Throws an error if decryption fails (e.g., invalid auth tag).
+   *
+   * @example
+   * try {
+   *   const decrypted = decryptData('a1b2c3d4e5f6:7g8h9i0j1k2l:3m4n5o6p7q8r');
+   *   console.log(decrypted); // e.g., "mySensitiveData"
+   * } catch (error) {
+   *   console.error('Decryption failed:', error.message);
+   * }
+   */
   decryptData(encryptedData: string): string {
     const [ivHex, encryptedHex, authTagHex] = encryptedData.split(':');
     const iv = Buffer.from(ivHex, 'hex');
@@ -165,11 +189,6 @@ export class TasksService {
       user,
     };
 
-    this.tasksRepository.create({
-      ...updateTaskDto,
-      user,
-    });
-
     if (updateTaskDto.title) {
       updatedFields.title = this.encryptData(updateTaskDto.title);
     }
@@ -198,7 +217,26 @@ export class TasksService {
     return true;
   }
 
-  async idExists(id: string) {
+  /**
+   * Checks if a task with the given ID exists in the repository.
+   *
+   * @async
+   * @param {string} id - The unique identifier of the task to check for existence.
+   * @returns {Promise<void>} A promise that resolves to void.
+   * @throws {NotFoundException} Throws an exception if the task with the specified ID does not exist.
+   *
+   * @example
+   * try {
+   *   await idExists('some-task-id');
+   *   // Task exists, proceed with other operations
+   * } catch (error) {
+   *   if (error instanceof NotFoundException) {
+   *     console.error(error.message);
+   *     // Handle the case where the task does not exist
+   *   }
+   * }
+   */
+  async idExists(id: string): Promise<void> {
     if (
       !(await this.tasksRepository.exist({
         where: {
