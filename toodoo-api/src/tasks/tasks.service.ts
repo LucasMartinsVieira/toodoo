@@ -120,7 +120,15 @@ export class TasksService {
       throw new HttpException('Tasks not found!', HttpStatus.NOT_FOUND);
     }
 
-    return tasks;
+    try {
+      return tasks.map((task) => ({
+        ...task,
+        title: this.decryptData(task.title),
+        description: this.decryptData(task.description),
+      }));
+    } catch (e) {
+      throw new BadRequestException('Could not retrieve tasks!');
+    }
   }
 
   async findOne(id: string, userId: string) {
@@ -133,7 +141,14 @@ export class TasksService {
       },
     });
 
-    return task;
+    const decryptedTitle = this.decryptData(task.title);
+    const decryptedDescription = this.decryptData(task.description);
+
+    return {
+      ...task,
+      title: decryptedTitle,
+      description: decryptedDescription,
+    };
   }
 
   async update(id: string, updateTaskDto: UpdateTaskDto, userId: string) {
