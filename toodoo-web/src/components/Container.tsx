@@ -1,7 +1,7 @@
 interface ContainerProps {
   children: React.ReactNode;
 }
-const Container: React.FC<ContainerProps> = ({ children }) => {
+const MainContainer: React.FC<ContainerProps> = ({ children }) => {
   return (
     <div
       className="flex flex-col items-center justify-center 
@@ -12,4 +12,4 @@ const Container: React.FC<ContainerProps> = ({ children }) => {
   );
 };
 
-export default Container;
+export default MainContainer;
