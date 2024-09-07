@@ -1,0 +1,48 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: db
+    volumes:
+      - "db_data:/var/lib/mysql"
+    restart: always
+    env_file:
+      - ./toodoo-api/.env
+    ports:
+      - 3306:3306
+    networks:
+      - mynetwork
+
+  toodoo-api:
+    container_name: toodoo-api
+    build:
+      context: ./toodoo-api
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    env_file:
+      - ./toodoo-api/.env
+    depends_on:
+      - db
+    networks:
+      - mynetwork
+
+  toodoo-web:
+    container_name: toodoo-web
+    build:
+      context: ./toodoo-web
+      dockerfile: Dockerfile
+    ports:
+      - 4000:4000
+    env_file:
+      - ./toodoo-web/.env
+    depends_on:
+      - toodoo-api
+    networks:
+      - mynetwork
+
+volumes:
+  db_data: {}
+
+networks:
+  mynetwork: 
+    driver: bridge
