@@ -51,7 +51,7 @@ const Tasks = () => {
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const userTasks = await getUserTasks();
+        const userTasks = JSON.parse(await getUserTasks());
         setTasks(userTasks);
         setFilteredTasks(userTasks); // Set the filtered tasks to all to initialize
       } catch (error) {

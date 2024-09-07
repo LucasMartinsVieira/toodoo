@@ -23,3 +23,5 @@
 - add login page
 - add profile page
   - Add delete account button using shadcn/ui alert-dialog
+- add tasks page
+- add tasks detail page
