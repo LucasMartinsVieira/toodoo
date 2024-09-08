@@ -4,7 +4,7 @@ import { AuthController } from 'src/auth/auth.controller';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { AuthService } from 'src/auth/auth.service';
 
-describe('AppController', () => {
+describe('AuthController', () => {
   let authController: AuthController;
 
   const userId = {
