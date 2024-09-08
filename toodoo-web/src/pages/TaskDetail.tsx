@@ -17,6 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import Header from "@/components/Header";
 
 const TaskDetail = () => {
   const [task, setTask] = useState<Task>();
@@ -69,9 +70,7 @@ const TaskDetail = () => {
     <>
       <Nav />
       <MainContainer>
-        <header className="text-4xl font-bold text-violet-600 mb-4">
-          Task Details
-        </header>
+        <Header>Task Details</Header>
         <form
           onSubmit={handleUpdate}
           className="bg-gray-800 text-white p-6 rounded-lg mb-6"

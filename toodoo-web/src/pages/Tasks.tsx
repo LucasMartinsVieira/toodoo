@@ -28,6 +28,7 @@ import { useNavigate } from "react-router-dom";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { addDays, format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
+import Header from "@/components/Header";
 
 export interface Task {
   id: string;
@@ -112,9 +113,7 @@ const Tasks = () => {
     <>
       <Nav />
       <MainContainer>
-        <header className="text-4xl font-bold text-violet-600 mb-4">
-          Your Tasks
-        </header>
+        <Header>Your Tasks</Header>
         <p className="text-lg text-gray-500 mb-8">
           View and manage your tasks below.
         </p>

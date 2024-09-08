@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import Nav from "../components/Nav";
 import MainContainer from "@/components/Container";
 import useAuth from "@/hooks/useAuth";
+import Header from "@/components/Header";
 
 const Home = () => {
   const isLoggedIn = useAuth();
@@ -10,9 +11,7 @@ const Home = () => {
     <>
       <Nav />
       <MainContainer>
-        <header className="text-4xl font-bold text-violet-600 mb-4">
-          Welcome to Toodoo
-        </header>
+        <Header>Welcome to Toodoo</Header>
         <p className="text-lg text-gray-500 mb-8">
           Keep your tasks private and securely manage your to-do list.
         </p>

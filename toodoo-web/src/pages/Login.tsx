@@ -1,4 +1,5 @@
 import MainContainer from "@/components/Container";
+import Header from "@/components/Header";
 import Nav from "@/components/Nav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -36,9 +37,7 @@ const Login = () => {
     <>
       <Nav />
       <MainContainer>
-        <header className="text-4xl font-bold text-violet-600 mb-4">
-          Sign in to your account
-        </header>
+        <Header>Sign in to your account</Header>
         <p className="text-lg text-gray-500 mb-8">
           Sign in to start managing your to-do list securely.
         </p>

@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { registerUser } from "@/services/authService";
 import { useNavigate } from "react-router-dom";
+import Header from "@/components/Header";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -61,9 +62,7 @@ const Register = () => {
     <>
       <Nav />
       <MainContainer>
-        <header className="text-4xl font-bold text-violet-600 mb-4">
-          Create Your Account
-        </header>
+        <Header>Create Your Account</Header>
         <p className="text-lg text-gray-500 mb-8">
           Sign up to start managing your to-do list securely.
         </p>

@@ -1,4 +1,5 @@
 import MainContainer from "@/components/Container";
+import Header from "@/components/Header";
 import Nav from "@/components/Nav";
 import {
   AlertDialogAction,
@@ -71,9 +72,7 @@ const Profile = () => {
     <>
       <Nav />
       <MainContainer>
-        <header className="text-4xl font-bold text-violet-600 mb-4">
-          Your Profile
-        </header>
+        <Header>Your Profile</Header>
         <p className="text-lg text-gray-500 mb-8">
           Update your account details below.
         </p>

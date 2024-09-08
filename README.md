@@ -28,3 +28,4 @@
 - Add docker support
   - prod
   - dev
+- Add Header component
