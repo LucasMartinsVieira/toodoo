@@ -6,35 +6,42 @@ services:
       - "db_data:/var/lib/mysql"
     restart: always
     env_file:
-      - ./toodoo-api/.env
+      - ./toodoo-api/.env.local
     ports:
       - 3306:3306
     networks:
       - mynetwork
 
   toodoo-api:
-    container_name: toodoo-api
+    container_name: toodoo-api-dev
     build:
       context: ./toodoo-api
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     ports:
       - 3000:3000
+    environment:
+      - NODE_ENV=development
     env_file:
-      - ./toodoo-api/.env
+      - ./toodoo-api/.env.local
     depends_on:
       - db
     networks:
       - mynetwork
 
   toodoo-web:
-    container_name: toodoo-web
+    container_name: toodoo-web-dev
     build:
       context: ./toodoo-web
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     ports:
       - 4000:4000
+    volumes:
+      - ./toodoo-web:/app  # Mount the frontend directory to the container
+      - /app/node_modules  # Ensure node_modules is handled inside the container
+    environment:
+      - NODE_ENV=development
     env_file:
-      - ./toodoo-web/.env
+      - ./toodoo-web/.env.local
     depends_on:
       - toodoo-api
     networks:

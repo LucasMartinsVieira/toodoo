@@ -10,6 +10,10 @@ import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
+      envFilePath:
+        process.env.NODE_ENV === 'development'
+          ? '.env.local'
+          : '.env.production',
       isGlobal: true,
     }),
     TypeOrmModule.forRoot({

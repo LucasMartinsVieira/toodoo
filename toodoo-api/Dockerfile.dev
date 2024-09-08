@@ -1,4 +1,4 @@
-# Frontend Dockerfile (frontend/Dockerfile)
+# Backend Dockerfile (backend/Dockerfile)
 # Use the official Node.js image as the base image
 FROM node:20-alpine
 
@@ -14,11 +14,8 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 
-# Build the Vite application
-RUN npm run build
+# Expose the application port
+EXPOSE 3000
 
-# Expose the Vite dev server port
-EXPOSE 4000
-
-# Start the Vite development server
-CMD ["npm", "run", "preview"]
+# Start the NestJS application
+CMD ["npm", "run", "start:dev"]

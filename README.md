@@ -25,3 +25,6 @@
   - Add delete account button using shadcn/ui alert-dialog
 - add tasks page
 - add tasks detail page
+- Add docker support
+  - prod
+  - dev
