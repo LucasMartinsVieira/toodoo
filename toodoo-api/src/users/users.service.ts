@@ -1,7 +1,5 @@
 import {
   BadRequestException,
-  HttpException,
-  HttpStatus,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -45,8 +43,7 @@ export class UsersService {
   async findAll() {
     const users = await this.usersRepository.find();
 
-    if (users.length === 0)
-      throw new HttpException('Users not found!', HttpStatus.NOT_FOUND);
+    if (users.length === 0) throw new NotFoundException('Users not found!');
 
     return users;
   }
