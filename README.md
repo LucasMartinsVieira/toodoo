@@ -30,3 +30,4 @@
   - dev
 - Add Header component
 - add swagger documentation
+- add toodoo.svg
