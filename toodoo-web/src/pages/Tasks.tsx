@@ -81,6 +81,14 @@ const Tasks = () => {
   };
 
   const handleCreateTask = async () => {
+    if (newTaskTitle.length > 64) {
+      alert("Title cannot be longer than 64 characters");
+    }
+
+    if (newTaskDescription.length > 800) {
+      alert("Description cannot be longer than 800 characters");
+    }
+
     const newTask = {
       title: newTaskTitle,
       description: newTaskDescription,

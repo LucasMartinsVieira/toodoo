@@ -19,6 +19,9 @@ services:
       dockerfile: Dockerfile.dev
     ports:
       - 3000:3000
+    volumes:
+      - ./toodoo-api:/app  # Mount the toodoo-api directory to the container
+      - /app/node_modules  # Ensure node_modules is handled inside the container
     environment:
       - NODE_ENV=development
     env_file:
@@ -36,7 +39,7 @@ services:
     ports:
       - 4000:4000
     volumes:
-      - ./toodoo-web:/app  # Mount the frontend directory to the container
+      - ./toodoo-web:/app  # Mount the toodoo-web directory to the container
       - /app/node_modules  # Ensure node_modules is handled inside the container
     environment:
       - NODE_ENV=development

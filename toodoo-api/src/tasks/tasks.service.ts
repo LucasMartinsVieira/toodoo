@@ -156,7 +156,7 @@ export class TasksService {
   }
 
   async findOne(id: string, userId: string) {
-    this.idExists(id);
+    await this.idExists(id);
 
     const task = await this.tasksRepository.findOne({
       where: {
@@ -207,7 +207,7 @@ export class TasksService {
   }
 
   async remove(id: string, userId: string) {
-    this.idExists(id);
+    await this.idExists(id);
 
     await this.tasksRepository.delete({
       id: id,

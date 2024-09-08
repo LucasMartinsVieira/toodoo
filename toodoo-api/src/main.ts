@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -18,6 +19,17 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
 
   app.setGlobalPrefix('api');
+
+  const config = new DocumentBuilder()
+    .setTitle('Toodoo API')
+    .setDescription('Toodoo API Description')
+    .addTag('auth')
+    .addTag('tasks')
+    .addBearerAuth()
+    .build();
+
+  const doc = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, doc);
 
   await app.listen(Number(port), host);
 }

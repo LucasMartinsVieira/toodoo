@@ -11,9 +11,11 @@ import { AuthModule } from './auth/auth.module';
   imports: [
     ConfigModule.forRoot({
       envFilePath:
-        process.env.NODE_ENV === 'development'
-          ? '.env.local'
-          : '.env.production',
+        process.env.NODE_ENV === 'test'
+          ? '.env.test'
+          : process.env.NODE_ENV === 'development'
+            ? '.env.local'
+            : '.env.production',
       isGlobal: true,
     }),
     TypeOrmModule.forRoot({
@@ -24,7 +26,7 @@ import { AuthModule } from './auth/auth.module';
       password: process.env.MYSQL_PASSWORD,
       database: process.env.MYSQL_DATABASE,
       entities: [User, Task],
-      synchronize: process.env.ENV === 'development' ? true : false,
+      synchronize: process.env.NODE_ENV === 'development' ? true : false,
       extra: {
         authPlugins: {
           mysql_native_password: () =>
