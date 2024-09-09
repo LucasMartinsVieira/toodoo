@@ -105,6 +105,13 @@ npm run start:prod
 - Go to `localhost:4000/` to access the toodoo
 - Go to `localhost:3000/api` to access swagger (toodoo-api)
 
+## Development Decisions
+
+- **Database**: I opted for MySQL over SQLite due to my greater familiarity with it.
+- **Back-end Framework**: I selected NestJS instead of Express for its superior developer experience (DX) and its built-in standardization features.
+- **Testing**: Implemented both unit and integration tests for the back-end to ensure reliability.
+- **Docker**: Utilized Docker to streamline the local development process and enhance the overall developer experience.
+
 ## Development Steps
 
 1. **Initialized NestJS Application**
