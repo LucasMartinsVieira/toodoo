@@ -3,6 +3,10 @@
     <p>Keep your tasks private and securely manage your to-do list.</p>
 </div>
 
+## About
+
+Toodoo is a secure and privacy-focused to-do list application designed to help you manage your tasks efficiently while keeping your data safe. The app prioritizes user privacy by implementing end-to-end encryption, ensuring that your tasks remain private and accessible only to you. Whether you are managing daily chores, work projects, or personal goals, Toodoo provides a simple yet robust platform to organize and track your tasks.
+
 ## Accessing the App
 
 You can access the app with the following link: https://toodoo-web.vercel.app/
