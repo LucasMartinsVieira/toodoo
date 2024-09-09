@@ -61,18 +61,22 @@ export class AuthService {
   }
 
   async signIn(signInUserDto: SignInUserDto) {
-    const user = await this.validateUser(signInUserDto);
-
-    if (user) {
+    try {
+      const user = await this.validateUser(signInUserDto);
       return await this.createToken(user);
+    } catch (error) {
+      throw new UnauthorizedException(
+        'Invalid credentials or token creation failed',
+      );
     }
   }
 
   async register(registerUserDto: RegisterUserDto) {
-    const user = await this.usersService.create(registerUserDto);
-
-    if (user) {
+    try {
+      const user = await this.usersService.create(registerUserDto);
       return await this.createToken(user);
+    } catch (error) {
+      throw new UnauthorizedException();
     }
   }
 
