@@ -7,7 +7,7 @@
 
 You can access the app with the following link: https://toodoo-web.vercel.app/
 
-> ![note]
+> [!NOTE]
 > Since this application is running on free-tier services, it may not work or be extremely slow. For a better experience, I recommend running it locally, either using Docker or setting it up manually.
 
 ### Running locally
