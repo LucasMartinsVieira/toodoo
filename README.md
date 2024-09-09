@@ -31,3 +31,7 @@
 - Add Header component
 - add swagger documentation
 - add toodoo.svg
+- deploy
+  - toodoo-web: vercel
+  - toodoo-api: render
+  - toodoo-db: clever-cloud
