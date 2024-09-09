@@ -1,7 +1,5 @@
 import {
   BadRequestException,
-  HttpException,
-  HttpStatus,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -73,21 +71,25 @@ export class TasksService {
    * }
    */
   decryptData(encryptedData: string): string {
-    const [ivHex, encryptedHex, authTagHex] = encryptedData.split(':');
-    const iv = Buffer.from(ivHex, 'hex');
-    const authTag = Buffer.from(authTagHex, 'hex');
+    try {
+      const [ivHex, encryptedHex, authTagHex] = encryptedData.split(':');
+      const iv = Buffer.from(ivHex, 'hex');
+      const authTag = Buffer.from(authTagHex, 'hex');
 
-    const decipher = crypto.createDecipheriv(
-      'aes-256-gcm',
-      this.encryptionKey,
-      iv,
-    );
-    decipher.setAuthTag(authTag);
+      const decipher = crypto.createDecipheriv(
+        'aes-256-gcm',
+        this.encryptionKey,
+        iv,
+      );
+      decipher.setAuthTag(authTag);
 
-    let decrypted = decipher.update(encryptedHex, 'hex', 'utf8');
-    decrypted += decipher.final('utf8');
+      let decrypted = decipher.update(encryptedHex, 'hex', 'utf8');
+      decrypted += decipher.final('utf8');
 
-    return decrypted;
+      return decrypted;
+    } catch (error) {
+      throw new BadRequestException('Decryption failed');
+    }
   }
 
   async create(createTaskDto: CreateTaskDto, userId: string): Promise<boolean> {
@@ -141,7 +143,7 @@ export class TasksService {
     });
 
     if (tasks.length === 0) {
-      throw new HttpException('Tasks not found!', HttpStatus.NOT_FOUND);
+      throw new NotFoundException('Tasks not found!');
     }
 
     try {
@@ -156,14 +158,16 @@ export class TasksService {
   }
 
   async findOne(id: string, userId: string) {
-    await this.idExists(id);
-
     const task = await this.tasksRepository.findOne({
       where: {
         id: id,
         user: { id: userId },
       },
     });
+
+    if (!task) {
+      throw new NotFoundException(`The task ${id} does not exist!`);
+    }
 
     const decryptedTitle = this.decryptData(task.title);
     const decryptedDescription = this.decryptData(task.description);
@@ -176,7 +180,11 @@ export class TasksService {
   }
 
   async update(id: string, updateTaskDto: UpdateTaskDto, userId: string) {
-    await this.idExists(id);
+    const task = this.tasksRepository.findOne({ where: { id } });
+
+    if (!task) {
+      throw new NotFoundException(`The task ${id} does not exist!`);
+    }
 
     const user = await this.usersRepository.findOne({ where: { id: userId } });
 
@@ -197,22 +205,26 @@ export class TasksService {
       updatedFields.description = this.encryptData(updateTaskDto.description);
     }
 
-    try {
-      await this.tasksRepository.update(id, updatedFields);
-    } catch (e) {
-      throw new BadRequestException('Could not update task!');
+    const { affected } = await this.tasksRepository.update(id, updatedFields);
+
+    if (affected === 0) {
+      throw new NotFoundException(
+        `Task with ID ${id} not found or does not belong to user ${userId}`,
+      );
     }
 
     return true;
   }
 
   async remove(id: string, userId: string) {
-    await this.idExists(id);
-
-    await this.tasksRepository.delete({
+    const result = await this.tasksRepository.delete({
       id: id,
       user: { id: userId },
     });
+
+    if (result.affected === 0) {
+      throw new NotFoundException(`The task ${id} does not exist!`);
+    }
 
     return true;
   }
